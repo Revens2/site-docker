@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php_web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./php:/var/www/html
+    networks:
+      - mon_reseau
+
+  db:
+    image: mariadb:10.6
+    container_name: mariadb_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rgl
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./db-init:/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+    networks:
+      - mon_reseau
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - mon_reseau
+
+volumes:
+  db_data:
+
+networks:
+  mon_reseau:
+    driver: bridge
