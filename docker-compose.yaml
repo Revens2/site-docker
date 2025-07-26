@@ -10,6 +10,8 @@ services:
       - "8080:80"
     volumes:
       - ./php:/var/www/html
+    depends_on:
+      - db
     networks:
       - mon_reseau
 
@@ -26,7 +28,9 @@ services:
       - ./db-init:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     networks:
-      - mon_reseau
+      mon_reseau:
+        aliases:
+          - db
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
