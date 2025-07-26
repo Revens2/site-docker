@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: php_web
     ports:
       - "8080:80"
     volumes:
@@ -17,7 +16,7 @@ services:
 
   db:
     image: mariadb:10.6
-    container_name: mariadb_db
+    hostname: db
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: rgl
@@ -34,7 +33,6 @@ services:
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin
     ports:
       - "8081:80"
     environment:
