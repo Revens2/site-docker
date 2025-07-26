@@ -10,6 +10,8 @@ services:
       - "8080:80"
     volumes:
       - ./php:/var/www/html
+    depends_on:
+      - db
     networks:
       - mon_reseau
 
@@ -21,11 +23,14 @@ services:
       MYSQL_DATABASE: rgl
       MYSQL_USER: root
       MYSQL_PASSWORD: root
+    command: --init-file /docker-entrypoint-initdb.d/init.sql
     volumes:
       - ./db-init:/docker-entrypoint-initdb.d
       - db_data:/var/lib/mysql
     networks:
-      - mon_reseau
+      mon_reseau:
+        aliases:
+          - db
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
